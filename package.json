@@ -13,7 +13,7 @@
 		"onCommand:appService.helloWorld",
 		"onCommand:appService.Refresh",
 		"onFileSystem:mongoDBService",
-        "onView:mongoDBService"
+		"onView:mongoDBService"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -23,60 +23,60 @@
 				"title": "Hello World"
 			},
 			{
-                "command": "appService.Refresh",
-                "title": "Refresh",
-                "category": "Mongo Tab",
-                "icon": {
-                    "light": "resources/refresh.svg",
-                    "dark": "resources/refresh.svg"
-                }
-            },
+				"command": "appService.Refresh",
+				"title": "Refresh",
+				"category": "Mongo Tab",
+				"icon": {
+					"light": "resources/refresh.svg",
+					"dark": "resources/refresh.svg"
+				}
+			},
 			{
-                "command": "appService.AddConnection",
-                "title": "Add Connection",
-                "category": "Mongo Tab",
-                "icon": {
-                    "light": "resources/add.svg",
-                    "dark": "resources/add.svg"
-                }
-            }
+				"command": "appService.AddConnection",
+				"title": "Add Connection",
+				"category": "Mongo Tab",
+				"icon": {
+					"light": "resources/add.svg",
+					"dark": "resources/add.svg"
+				}
+			}
 		],
 		"viewsContainers": {
-            "activitybar": [
-                {
-                    "id": "mongo-tab",
-                    "title": "Mongo Tab",
-                    "icon": "resources/icon.svg"
-                }
-            ]
-        },
-        "views": {
-            "mongo-tab": [
-                {
-                    "id": "mongoDBService",
-                    "name": "Mongo Database"
-                }
+			"activitybar": [
+				{
+					"id": "mongo-tab",
+					"title": "Mongo Tab",
+					"icon": "resources/icon.svg"
+				}
+			]
+		},
+		"views": {
+			"mongo-tab": [
+				{
+					"id": "mongoDBService",
+					"name": "Mongo Database"
+				}
 			]
 		},
 		"menus": {
 			"view/title": [
 				{
-                    "command": "appService.AddConnection",
-                    "when": "view == mongoDBService",
-                    "group": "navigation@1"
-                },
+					"command": "appService.AddConnection",
+					"when": "view == mongoDBService",
+					"group": "navigation@1"
+				},
 				{
-                    "command": "appService.Refresh",
-                    "when": "view == mongoDBService",
-                    "group": "navigation@2"
-                }
-            ],
+					"command": "appService.Refresh",
+					"when": "view == mongoDBService",
+					"group": "navigation@2"
+				}
+			],
 			"view/item/context": [
 				{
-                    "command": "appService.Refresh",
-                    "when": "view == azureAppService",
-                    "group": "2_subscriptionGeneralCommands@1"
-                }
+					"command": "appService.Refresh",
+					"when": "view == azureAppService",
+					"group": "2_subscriptionGeneralCommands@1"
+				}
 			]
 		}
 	},
@@ -100,5 +100,9 @@
 		"mocha": "^7.1.2",
 		"typescript": "^3.8.3",
 		"vscode-test": "^1.3.0"
+	},
+	"dependencies": {
+		"fs": "0.0.1-security",
+		"path": "^0.12.7"
 	}
 }

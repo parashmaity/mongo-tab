@@ -24,7 +24,7 @@ export default class RegisterCommandEvent {
      * @param context 
      */
     registerCommand(context: vscode.ExtensionContext){
-        const disposableRefresh = vscode.commands.registerCommand('appService.AddConnection', () => this.db.refresh() );
+        const disposableRefresh = vscode.commands.registerCommand('appService.AddConnection', () => this.db.addNewDatabase() );
         context.subscriptions.push(disposableRefresh);
     }
 }
