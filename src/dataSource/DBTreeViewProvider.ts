@@ -7,25 +7,18 @@ export interface IBaseIcon {
     dark : String,
 }
 
-export default class TreeDataProvider implements vscode.TreeDataProvider<BaseTreeItem> {
+export class TreeDataProvider implements vscode.TreeDataProvider<BaseTreeItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<BaseTreeItem | undefined> = new vscode.EventEmitter<BaseTreeItem | undefined>();
     readonly onDidChangeTreeData: vscode.Event<BaseTreeItem | undefined> = this._onDidChangeTreeData.event;
 
-    data: BaseTreeItem[];
+    data: BaseTreeItem[] = [];
+    hostServer : BaseTreeItem[] = [];
 
     constructor() {
-        const dataSource = new BaseTreeItem('Bata Source', []);
-        dataSource.iconPath = this.getIcon('source');
-        this.data = [ dataSource ];
-        //
-        this.addHostServer('localhost');
+        this.refresh();
     }
 
     getTreeItem(element: BaseTreeItem): BaseTreeItem | Thenable<BaseTreeItem> {
-        // element.iconPath = {
-        //     light: path.join(__filename, '..', '..', '..', 'resources', 'f-icon.svg'),
-        //     dark: path.join(__filename, '..', '..', '..', 'resources', 'f-icon.svg')
-        // };
         return element;
     }
 
@@ -37,22 +30,66 @@ export default class TreeDataProvider implements vscode.TreeDataProvider<BaseTre
     }
 
     public refresh(): void {
+        this.data = [];
+        const settings = new BaseTreeItem('Settings', undefined);
+        settings.iconPath = this.getIcon('settings');
+        settings.command = {
+            command: 'appService.settings',
+            title : ''
+        };
+        this.data.push(settings);
+        const dataSource = new BaseTreeItem('Data Source', []);
+        dataSource.iconPath = this.getIcon('source');
+        this.data.push(dataSource);
         this._onDidChangeTreeData.fire(undefined);
     }
 
     public addHostServer(name : any) : void {
         const host = new BaseTreeItem(name, [] );
         host.iconPath = this.getIcon('host');
-        this.data[0].children?.push(host);
+        this.hostServer.push(host);
+        this.data[1].children = this.hostServer ;
         this._onDidChangeTreeData.fire(undefined);
     }
 
-    public addNewDatabase() {
-        const database = new BaseTreeItem('database', [] );
+    public addNewDatabase( hostName : string, name : string) {
+        const database = new BaseTreeItem(name, [] );
         database.iconPath = this.getIcon('database');
-        this.data[0].children?.push(database);
-        this._onDidChangeTreeData.fire(undefined);
+        //console.log(this.data);
+        this.data[1].children?.map(h => {
+            if ( h.label === hostName){
+                h.children?.push(database);
+                this._onDidChangeTreeData.fire(undefined);
+            }
+        });
 
+    }
+
+    public addNewCollections( hostName : string, dbName : string, collections : BaseTreeItem[]) {
+        this.data[1].children?.map(h => {
+            if ( h.label === hostName){
+                h.children?.map(n => {
+                    if ( n.label === dbName){
+                        collections.map(d => {
+                            d.iconPath = this.getIcon('collection');
+                            //n.children?.push(d);
+                        });
+                        n.children = collections;
+                        this._onDidChangeTreeData.fire(undefined);
+                    }
+                });
+            }
+        });
+    }
+
+    public getHostByName(name : string) : BaseTreeItem {
+        const host = this.data[1].children;
+        host?.map(h => {
+            if ( h.label === name){
+                return h;
+            }
+        });
+        return new BaseTreeItem(name, []);
     }
 
     getIcon(iconName : string) : any {
@@ -63,7 +100,7 @@ export default class TreeDataProvider implements vscode.TreeDataProvider<BaseTre
     }
 }
 
-class BaseTreeItem extends vscode.TreeItem {
+export class BaseTreeItem extends vscode.TreeItem {
     children: BaseTreeItem[] | undefined;
 
     constructor(label: string, children?: BaseTreeItem[]) {

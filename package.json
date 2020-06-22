@@ -10,8 +10,9 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:appService.helloWorld",
+		"onCommand:appService.settings",
 		"onCommand:appService.Refresh",
+		"onCommand:appService.openCollection",
 		"onFileSystem:mongoDBService",
 		"onView:mongoDBService"
 	],
@@ -19,8 +20,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "appService.helloWorld",
-				"title": "Hello World"
+				"command": "appService.settings",
+				"title": "Settings"
 			},
 			{
 				"command": "appService.Refresh",
@@ -39,6 +40,10 @@
 					"light": "resources/add.svg",
 					"dark": "resources/add.svg"
 				}
+			},
+			{
+				"command": "appService.openCollection",
+				"title": "Open Collection"
 			}
 		],
 		"viewsContainers": {
@@ -74,10 +79,39 @@
 			"view/item/context": [
 				{
 					"command": "appService.Refresh",
-					"when": "view == azureAppService",
-					"group": "2_subscriptionGeneralCommands@1"
+					"when": "view == azureAppService"
 				}
 			]
+		},
+		"configuration": {
+			"title": "Mongo Tab",
+			"properties": {
+				"appService.hostName": {
+					"type": "string",
+					"default": "localhost",
+					"description": "MongoDB connection host name"
+				},
+				"appService.hostPort": {
+					"type": "string",
+					"default": "20020",
+					"description": "MongoDB connection host port"
+				},
+				"appService.username": {
+					"type": "string",
+					"default": "root",
+					"description": "MongoDB connection username"
+				},
+				"appService.password": {
+					"type": "string",
+					"default": "password",
+					"description": "MongoDB connection password"
+				},
+				"appService.database": {
+					"type": "string",
+					"default": "mongo",
+					"description": "MongoDB connection database"
+				}
+			}
 		}
 	},
 	"scripts": {
@@ -103,6 +137,8 @@
 	},
 	"dependencies": {
 		"fs": "0.0.1-security",
+		"mongodb": "^3.5.9",
+		"mongoose": "^5.9.19",
 		"path": "^0.12.7"
 	}
 }

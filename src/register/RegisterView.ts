@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import TreeDataProvider from '../dataSource/DBTreeViewProvider';
+import { TreeDataProvider } from '../dataSource/DBTreeViewProvider';
 
 export default class RegisterDataTreeView {
 
