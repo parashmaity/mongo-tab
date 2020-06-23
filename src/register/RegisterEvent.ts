@@ -35,7 +35,12 @@ export default class RegisterCommandEvent {
         const sett = vscode.commands.registerCommand('appService.settings', () => this.settings.openSettings(context) );
         context.subscriptions.push(sett);
 
-        const disposableAddNewDB = vscode.commands.registerCommand('appService.AddConnection', () => {});
+        const disposableAddNewDB = vscode.commands.registerCommand('appService.AddConnection', async () => {
+
+
+            const formatDocumentCommand = 'editor.action.formatDocument';
+        vscode.commands.executeCommand(formatDocumentCommand);
+        });
         context.subscriptions.push(disposableAddNewDB);
         const disposableRefresh = vscode.commands.registerCommand('appService.Refresh', () => {
             this.dbProvider =  new TreeDataProvider();
@@ -61,22 +66,18 @@ export default class RegisterCommandEvent {
             onDidChange = this.onDidChangeEmitter.event;
 
            provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
-                // simply invoke cowsay, use uri-path as text
-                const data = connect.getDataCollection(name);
                 return connect.getDataCollection(name);
             }
         };
         vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider);
         //const data = await connect.getDataCollection(name);
-        let uri = vscode.Uri.parse('MongoTab:'+name);
-        const data = connect.getDataCollection(name);
-        let doc = await vscode.workspace.openTextDocument(uri); // calls back into the provider
+        let uri = vscode.Uri.parse(`MongoTab:${name}.json`);
+        let doc = await vscode.workspace.openTextDocument( uri); 
         const newDoc = await vscode.languages.setTextDocumentLanguage(doc, 'json');
         
-        await vscode.window.showTextDocument(newDoc, { preview: false });
- 
-        await vscode.commands.executeCommand('vscode.executeFormatDocumentProvider', uri, doc. );
-        //vscode.executeFormatDocumentProvider();
+        await vscode.window.showTextDocument(newDoc, { preview: true });
+        const formatDocumentCommand = 'editor.action.formatDocument';
+        vscode.commands.executeCommand(formatDocumentCommand);
     }
 
 }
