@@ -39,7 +39,7 @@ export default class RegisterCommandEvent {
 
 
             const formatDocumentCommand = 'editor.action.formatDocument';
-        vscode.commands.executeCommand(formatDocumentCommand);
+            vscode.commands.executeCommand(formatDocumentCommand);
         });
         context.subscriptions.push(disposableAddNewDB);
         const disposableRefresh = vscode.commands.registerCommand('appService.Refresh', () => {
@@ -59,25 +59,25 @@ export default class RegisterCommandEvent {
     async open(context: vscode.ExtensionContext, connect : DBConnection, name : string){
         const myScheme = 'MongoTab';
         
-        const myProvider = new class implements vscode.TextDocumentContentProvider {
+        // const myProvider = new class implements vscode.TextDocumentContentProvider {
 
-            // emitter and its event
-            onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-            onDidChange = this.onDidChangeEmitter.event;
+        //     // emitter and its event
+        //     onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
+        //     onDidChange = this.onDidChangeEmitter.event;
 
-           provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
-                return connect.getDataCollection(name);
-            }
-        };
-        vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider);
-        //const data = await connect.getDataCollection(name);
+        //    provideTextDocumentContent(uri: vscode.Uri): Promise<string> {
+        //         return connect.getDataCollection(name);
+        //     }
+        // };
+        // vscode.workspace.registerTextDocumentContentProvider(myScheme, myProvider);
+        const data = await connect.getDataCollection(name);
         let uri = vscode.Uri.parse(`MongoTab:${name}.json`);
-        let doc = await vscode.workspace.openTextDocument( uri); 
-        const newDoc = await vscode.languages.setTextDocumentLanguage(doc, 'json');
-        
-        await vscode.window.showTextDocument(newDoc, { preview: true });
+        let doc = await vscode.workspace.openTextDocument( {language : 'json' , content : data}); 
+        // const newDoc = await vscode.languages.setTextDocumentLanguage(doc, 'json');
+        await vscode.window.showTextDocument(doc, { preview: true });
         const formatDocumentCommand = 'editor.action.formatDocument';
         vscode.commands.executeCommand(formatDocumentCommand);
+        vscode.commands.executeCommand('appService.stopProgress');
     }
 
 }

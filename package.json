@@ -13,6 +13,7 @@
 		"onCommand:appService.settings",
 		"onCommand:appService.Refresh",
 		"onCommand:appService.openCollection",
+		"onCommand:appService.stopProgress",
 		"onFileSystem:mongoDBService",
 		"onView:mongoDBService"
 	],
@@ -44,6 +45,10 @@
 			{
 				"command": "appService.openCollection",
 				"title": "Open Collection"
+			},
+			{
+				"command": "appService.stopProgress",
+				"title": "Stop Progress"
 			}
 		],
 		"viewsContainers": {
@@ -51,7 +56,7 @@
 				{
 					"id": "mongo-tab",
 					"title": "Mongo Tab",
-					"icon": "resources/icon.svg"
+					"icon": "resources/collection.svg"
 				}
 			]
 		},
