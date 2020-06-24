@@ -30,7 +30,7 @@ export default class RegisterCommandEvent {
      */
     async registerCommand(context: vscode.ExtensionContext){
         // 
-        const connect = new DBConnection(this.dbProvider);
+        let connect = new DBConnection(this.dbProvider);
 
         const sett = vscode.commands.registerCommand('appService.settings', () => this.settings.openSettings(context) );
         context.subscriptions.push(sett);
@@ -44,7 +44,8 @@ export default class RegisterCommandEvent {
         context.subscriptions.push(disposableAddNewDB);
         const disposableRefresh = vscode.commands.registerCommand('appService.Refresh', () => {
             this.dbProvider =  new TreeDataProvider();
-            new DBConnection(this.dbProvider);
+            this.registerView();
+            connect = new DBConnection(this.dbProvider);
          });
         context.subscriptions.push(disposableRefresh);
         const disposableOpenCollection = vscode.commands.registerCommand('appService.openCollection', (collectionOpenParams) => {

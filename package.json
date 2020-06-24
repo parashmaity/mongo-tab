@@ -65,6 +65,10 @@
 				{
 					"id": "mongoDBService",
 					"name": "Mongo Database"
+				},
+				{
+					"id": "mongoDBServiceCURD",
+					"name": "CURD"
 				}
 			]
 		},
